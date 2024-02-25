@@ -62,7 +62,7 @@ stages:
     vmImage: ubuntu-latest
 
   jobs:
-  - deployment: "Deploy Dev"
+  - deployment: "DeployDev"
     environment: 'Dev'
     strategy:
      runOnce:
@@ -84,7 +84,7 @@ stages:
     vmImage: ubuntu-latest
 
   jobs:
-  - deployment: "Deploy Prod"
+  - deployment: "DeployProd"
     environment: 'Production'
     strategy:
      runOnce:
