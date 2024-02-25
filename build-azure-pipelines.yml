@@ -27,7 +27,7 @@ steps:
   displayName: 'Génération de la solution'
   inputs:
     command: 'build'
-    projects: **/*.csproj'
+    projects: '**/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
