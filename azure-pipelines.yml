@@ -54,12 +54,15 @@ stages:
         ArtifactName: 'drop'
         publishLocation: 'Container'
 
-- stage: 'Deploy'
+
+
+- stage: 'DeployToDev'
+  dependsOn: 'Build'
   pool:
     vmImage: ubuntu-latest
 
   jobs:
-  - deployment: "Build"
+  - deployment: "Deploy Dev"
     environment: 'Dev'
     strategy:
      runOnce:
@@ -72,4 +75,36 @@ stages:
                  downloadType: 'single'
                  artifactName: 'drop'
                  downloadPath: '$(System.ArtifactsDirectory)'
+
+
+
+- stage: 'DeployToProd'
+  dependsOn: 'DeployToDev'
+  pool:
+    vmImage: ubuntu-latest
+
+  jobs:
+  - deployment: "Deploy Prod"
+    environment: 'Production'
+    strategy:
+     runOnce:
+       deploy:
+         steps:
+             - task: DownloadBuildArtifacts@1
+               displayName: 'Télécharger artecfact pour le déploiement'
+               inputs:
+                 buildType: 'current'
+                 downloadType: 'single'
+                 artifactName: 'drop'
+                 downloadPath: '$(System.ArtifactsDirectory)'
+
+
+             - task: AzureWebApp@1
+               displayName: 'Déployer dabs App Service'
+               inputs:
+                azureSubscription: 'sc-azure-demo'
+                appType: 'webApp'
+                appName: 
+                package: '$(System.ArtifactsDirectory)/**/*.zip'
+                deploymentMethod: 'auto'
                  
