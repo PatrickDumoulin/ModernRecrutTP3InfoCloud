@@ -1,0 +1,32 @@
+﻿@model ModernRecrut.MVC.Models.UtilisateurRoleViewModel
+@{
+	ViewData["Title"] = "Assigner";
+}
+
+<h1>Assigner</h1>
+
+
+<div class="row">
+	<div class="col-md-4">
+		<form asp-action="Assigner">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+				<label asp-for="UtilisateurId" class="control-label"></label>
+				<select asp-for="UtilisateurId" asp-items="@ViewBag.Utilisateurs" class="form-select">
+					<option value="">-- Sélectionner un utilisateur --</option>
+				</select>
+				<span asp-validation-for="UtilisateurId" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="RoleName" class="control-label"></label>
+				<select asp-for="RoleName" asp-items="@ViewBag.Roles" class="form-select">
+					<option value="">-- Sélectionner un rôle --</option>
+				</select>
+				<span asp-validation-for="RoleName" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<input type="submit" value="Assigner" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</div>

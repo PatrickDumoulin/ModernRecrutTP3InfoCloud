@@ -1,0 +1,43 @@
+﻿@{
+	ViewData["Title"] = "Index";
+	string UrlStockage = ViewData["urlDossierDocuments"] as string;
+	string jeton = ViewData["JetonSAS"] as string;
+}
+
+<h1>Liste des documents</h1>
+<p>
+	<a asp-action="Create">Ajouter un document</a>
+</p>
+<hr />
+<table class="table">
+	<thead>
+		<tr>
+			<th>Type document</th>
+			<th>Document</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		@if (Model == null)
+		{
+			<tr>
+				<td colspan="3">Aucun document</td>
+			</tr>
+		}
+		else
+		{
+
+			@foreach (string document in Model)
+			{
+				var typeDocument = document.Split("_")[1];
+				typeDocument = typeDocument == "LettreDeMotivation" ? "Lettre de Motivation" : typeDocument;
+				<tr>
+					<td>@typeDocument</td>
+					<td>
+						<a href="@document" class="btn btn-primary pr-2" target="_blank">@document</a>
+					</td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>

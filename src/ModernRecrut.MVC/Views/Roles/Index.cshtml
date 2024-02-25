@@ -1,0 +1,74 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>
+@inject UserManager<ModernRecrut.MVC.Areas.Identity.Data.Utilisateur> UserManager
+@{
+    ViewData["Title"] = "Index";
+    var utilisateurs = ViewData["Utilisateurs"] as List<ModernRecrut.MVC.Areas.Identity.Data.Utilisateur>;
+}
+
+<p>
+	<a asp-action="Create">Ajouter Role</a>
+</p>
+<p>
+	<a asp-action="Assigner">Assigner Role</a>
+</p>
+
+<h2>Liste des différents rôles</h2>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Name)
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Name)
+				</td>
+
+			</tr>
+			}
+	</tbody>
+</table>
+
+
+<h2 class="mt-3">Listes des employés pour chaque rôles</h2>
+
+@if (utilisateurs != null)
+{
+	@foreach (var item in Model)
+	{
+		<h3>@Html.DisplayFor(modelItem => item.Name)</h3>
+		<table class="table">
+			<thead>
+				<th style="width: 33%;">Nom</th>
+				<th style="width: 33%;">Email</th>
+				<th style="width: 33%;">Id</th>
+			</thead>
+
+			@foreach(var utilisateur in utilisateurs)
+			{
+				<tbody>
+					@if(await UserManager.IsInRoleAsync(utilisateur, item.Name))
+					{
+						<tr>
+							<td>
+								@utilisateur.NomComplet
+							</td>
+							<td>
+								@utilisateur.Email
+							</td>
+							<td>
+								@utilisateur.Id
+							</td>
+						</tr>
+					}
+				</tbody>
+			}
+		</table>
+	}
+}

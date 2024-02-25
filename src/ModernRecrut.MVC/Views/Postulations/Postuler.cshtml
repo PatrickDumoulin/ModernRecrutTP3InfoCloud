@@ -1,0 +1,45 @@
+﻿@using System.Security.Claims;
+@model ModernRecrut.MVC.DTO.RequetePostulation
+
+@{
+    ViewData["Title"] = "Postuler";
+    OffreEmploi offreEmploi = ViewData["OffreEmploi"] as OffreEmploi;
+}
+
+<h1>Postuler</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Postuler">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="CandidatId" value="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value"/>
+            <div class="form-group">
+                <label asp-for="OffreDemploiId" class="control-label"></label>
+                <input type="hidden" asp-for="OffreDemploiId" value="@offreEmploi.Id"/>
+                <p class="fw-bold">@offreEmploi.Poste</p>
+            </div>
+            <div class="form-group">
+                <label asp-for="PretentionSalariale" class="control-label"></label>
+                <input asp-for="PretentionSalariale" class="form-control" />
+                <span asp-validation-for="PretentionSalariale" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateDisponibilite" class="control-label"></label>
+                <input asp-for="DateDisponibilite" class="form-control" />
+                <span asp-validation-for="DateDisponibilite" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Postuler" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="OffreEmplois" asp-action="Index">Retour aux offres d'emploi</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

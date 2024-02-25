@@ -1,0 +1,58 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using ModernRecrut.MVC.Areas.Identity.Data;
+@using ModernRecrut.MVC.Interfaces;
+@inject UserManager<Utilisateur> _userManager
+@inject IOffreEmploisService _offreEmploisService;
+@model ModernRecrut.MVC.Models.Postulation
+
+@{
+    ViewData["Title"] = "Delete";
+	bool suppressionAuthorisee = ViewData["suppressionAuthorisee"] is bool && (bool)ViewData["suppressionAuthorisee"];
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Postulation</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Nom du candidat
+        </dt>
+        <dd class = "col-sm-10">
+            @{ Utilisateur candidat = await _userManager.FindByIdAsync(Model.CandidatId);}
+            @Html.DisplayFor(model => candidat.NomComplet)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OffreDEmploiId)
+        </dt>
+        <dd class = "col-sm-10">
+            @{ OffreEmploi offreEmploi = await _offreEmploisService.ObtenirSelonId(Model.OffreDEmploiId);}
+            @Html.DisplayFor(model => offreEmploi.Poste)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PretentionSalariale)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PretentionSalariale)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DateDisponibilite)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DateDisponibilite)
+        </dd>
+    </dl>
+
+    @if(suppressionAuthorisee) {
+		<form asp-action="Delete">
+			<input type="submit" value="Supprimer" class="btn btn-danger" /> |
+			<a asp-action="ListePostulations">Retour à la liste des postulations</a>
+        </form>
+    } else
+    {
+        <p class="text-danger">Il n'est pas possible de modifier ou supprimer une postulation dont la date de disponibilité est inférieure ou supérieure de 5 jours à la date du jour</p>
+		<a asp-action="ListePostulations">Retour à la liste des postulations</a>
+    }
+</div>

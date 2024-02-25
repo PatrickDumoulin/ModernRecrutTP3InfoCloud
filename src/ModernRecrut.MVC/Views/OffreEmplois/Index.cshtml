@@ -1,0 +1,88 @@
+﻿@model IEnumerable<ModernRecrut.MVC.Models.OffreEmploi>
+
+@{
+    ViewData["Title"] = "Index";
+    var favorisIds = ViewData["Favoris"] as List<int> ?? new List<int>();
+}
+
+<h1>Liste des offres d'emploi</h1>
+
+<p>
+    <a asp-action="Create">Ajouter une nouvelle offre</a>
+</p>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Recherche de poste: <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" />
+			<input type="submit" value="Rechercher" class="btn btn-primary" />
+            <a asp-action="Index">Tous les résultats</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Poste)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateAffichage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateFin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+            bool estFavori = favorisIds.Contains(item.Id);
+
+            <tr @(estFavori ? Html.Raw("class='bg-warning bg-gradient'") : "")>
+            <td>
+                @Html.DisplayFor(modelItem => item.Poste)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateAffichage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateFin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+				@if(User.IsInRole("RH") || User.IsInRole("Admin"))
+				{
+					@Html.ActionLink("Modifier", "Edit", new { id=item.Id })
+                    <span>|</span>
+				}
+                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                @if(User.IsInRole("RH") || User.IsInRole("Admin"))
+                {
+					@Html.ActionLink("Supprimer", "Delete", new { id=item.Id })
+                    <span>|</span>
+                }
+
+				@if (!estFavori)
+				{
+                    <a asp-controller="Favoris" asp-action="Create" asp-route-id="@item.Id" class="btn btn-outline-primary">Ajouter au favoris</a>
+                }
+                else
+                {
+                    <a asp-controller="Favoris" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-secondary">Retirer des favoris</a>    
+                }
+				@if (User.IsInRole("Candidat"))
+				{
+					<a asp-controller="Postulations" asp-action="Postuler" asp-route-idOffreEmploi="@item.Id" class="btn btn-outline-primary">Postuler</a>
+				}
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,77 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using ModernRecrut.MVC.Areas.Identity.Data;
+@using ModernRecrut.MVC.Interfaces;
+@inject UserManager<Utilisateur> _userManager
+@inject IOffreEmploisService _offreEmploisService;
+@model ModernRecrut.MVC.Models.Postulation
+
+@{
+    ViewData["Title"] = "Edit";
+    bool modificationAuthorisee = ViewData["modificationAuthorisee"] is bool && (bool)ViewData["modificationAuthorisee"];
+}
+
+<h1>Edit</h1>
+
+<h4>Postulation</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label class="control-label">Nom du Candidat</label>
+                <input type="hidden" asp-for="CandidatId" />
+                <p>
+					@{ Utilisateur candidat = await _userManager.FindByIdAsync(Model.CandidatId);}
+					@Html.DisplayFor(model => candidat.NomComplet)
+                </p>
+            </div>
+            <div class="form-group">
+                <label asp-for="OffreDEmploiId" class="control-label"></label>
+                <input asp-for="OffreDEmploiId" class="form-control" />
+                <span asp-validation-for="OffreDEmploiId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PretentionSalariale" class="control-label"></label>
+                @if(modificationAuthorisee)
+                {
+                    <input asp-for="PretentionSalariale" class="form-control" />
+                } else
+                {
+                    <input asp-for="PretentionSalariale" class="form-control" readonly />
+                }
+                <span asp-validation-for="PretentionSalariale" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateDisponibilite" class="control-label"></label>
+                @if(modificationAuthorisee)
+                {
+                    <input asp-for="DateDisponibilite" class="form-control" />
+                } else
+                {
+                    <input asp-for="DateDisponibilite" class="form-control" readonly />
+                }
+                <span asp-validation-for="DateDisponibilite" class="text-danger"></span>
+            </div>
+
+			<div class="form-group">
+				@if(modificationAuthorisee)
+				{
+					<input type="submit" value="Enregistrer" class="btn btn-primary" />
+				} else
+				{
+					<p class="text-danger">Il n'est pas possible de modifier ou supprimer une postulation dont la date de disponibilité est inférieure ou supérieure de 5 jours à la date du jour</p>
+				}
+			</div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="ListePostulations">Retour à la liste des postulations</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

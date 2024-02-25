@@ -1,0 +1,49 @@
+﻿@model IEnumerable<ModernRecrut.MVC.Models.OffreEmploi>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Liste des favoris</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Poste)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateAffichage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateFin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Poste)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateAffichage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateFin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", "OffreEmplois", new { id=item.Id  }) |
+                @Html.ActionLink("Supprimer", "Delete", new {  id=item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

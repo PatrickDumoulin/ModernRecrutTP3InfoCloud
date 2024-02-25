@@ -1,0 +1,29 @@
+﻿@model ModernRecrut.MVC.Models.CodeStatusViewModel
+
+@{
+    ViewData["Title"] = "Oups - Erreur !!!";
+}
+
+<h1>Erreur @Model.CodeStatus</h1>
+
+<div>
+    <h2 class="text-danger"> @Model.MessageErreur</h2>
+
+    @if(Model.CodeStatus == 404)
+    {
+        <img class="img-fluid" src="/images/erreur-404.jpg" />
+    }
+    else if (Model.CodeStatus == 403)
+    {
+        <img class="img-fluid" src="/images/erreur-403.jpg" />
+    }
+    else if (Model.CodeStatus == 500)
+    {
+        <img class="img-fluid" src="/images/erreur-500.png" />
+    }
+    else
+    {
+        <img class="img-fluid" src="/images/erreur.jpg" />
+    }
+</div>
+
