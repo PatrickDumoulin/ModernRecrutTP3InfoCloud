@@ -24,7 +24,7 @@ steps:
 
 
 - task: DotNetCoreCLI@2
-  displayName: 'Génération de la solution'
+  displayName: 'Génération de la solutionn'
   inputs:
     command: 'build'
     projects: '**/*.csproj'
