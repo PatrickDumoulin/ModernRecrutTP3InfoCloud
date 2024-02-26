@@ -10,7 +10,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  bicepfile: '**\main.bicep'
+  bicepfile: '**/main.bicep'
 
 steps:
 - task: AzureCLI@2
