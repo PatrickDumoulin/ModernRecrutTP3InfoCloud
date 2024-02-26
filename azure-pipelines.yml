@@ -56,13 +56,18 @@ stages:
 
 
 
-- stage: 'DeployToDev'
-  dependsOn: 'Build'
+# API deployment stages
+
+#DEPLOYMENT POSTULATION API
+- stage: DeployPostulationsAPI
+  dependsOn: Build
   pool:
     vmImage: ubuntu-latest
 
+#DEV
   jobs:
-  - deployment: "DeployDev"
+  - deployment: "DeployPostulationsAPIDev"
+    dependsOn: Build
     environment: 'Dev'
     strategy:
      runOnce:
@@ -75,16 +80,19 @@ stages:
                  downloadType: 'single'
                  artifactName: 'drop'
                  downloadPath: '$(System.ArtifactsDirectory)'
-
-
-
-- stage: 'DeployToProd'
-  dependsOn: 'DeployToDev'
-  pool:
-    vmImage: ubuntu-latest
-
+             - task: AzureWebApp@1
+               displayName: 'Déployer dabs App Service'
+               inputs:
+                azureSubscription: 'sc-azure-demo'
+                appType: 'webApp'
+                appName: # A FAIRE
+                package: '$(System.ArtifactsDirectory)/**/*.zip'
+                deploymentMethod: 'auto'
+                
+#PROD
   jobs:
-  - deployment: "DeployProd"
+  - deployment: "DeployPostulationsAPIProd"
+    dependsOn: DeployPostulationsAPIDev
     environment: 'Production'
     strategy:
      runOnce:
@@ -97,14 +105,247 @@ stages:
                  downloadType: 'single'
                  artifactName: 'drop'
                  downloadPath: '$(System.ArtifactsDirectory)'
+             - task: AzureWebApp@1
+               displayName: 'Déployer dans App Service'
+               inputs:
+                azureSubscription: 'sc-azure-demo'
+                appType: 'webApp'
+                appName: # A FAIRE
+                package: '$(System.ArtifactsDirectory)/**/*.zip'
+                deploymentMethod: 'auto'
 
 
+#DEPLOYMENT EMPLOIS API
+- stage: DeployEmploisAPI
+  dependsOn: Build
+  pool:
+    vmImage: ubuntu-latest
+
+#DEV
+  jobs:
+  - deployment: "DeployEmploisAPIDev"
+    dependsOn: Build
+    environment: 'Dev'
+    strategy:
+     runOnce:
+       deploy:
+         steps:
+             - task: DownloadBuildArtifacts@1
+               displayName: 'Télécharger artecfact pour le déploiement'
+               inputs:
+                 buildType: 'current'
+                 downloadType: 'single'
+                 artifactName: 'drop'
+                 downloadPath: '$(System.ArtifactsDirectory)'
              - task: AzureWebApp@1
                displayName: 'Déployer dabs App Service'
                inputs:
                 azureSubscription: 'sc-azure-demo'
                 appType: 'webApp'
-                appName: 
+                appName: # A FAIRE
                 package: '$(System.ArtifactsDirectory)/**/*.zip'
                 deploymentMethod: 'auto'
-                 
+                
+#PROD
+  jobs:
+  - deployment: "DeployEmploisAPIProd"
+    dependsOn: DeployEmploisAPIDev
+    environment: 'Production'
+    strategy:
+     runOnce:
+       deploy:
+         steps:
+             - task: DownloadBuildArtifacts@1
+               displayName: 'Télécharger artecfact pour le déploiement'
+               inputs:
+                 buildType: 'current'
+                 downloadType: 'single'
+                 artifactName: 'drop'
+                 downloadPath: '$(System.ArtifactsDirectory)'
+             - task: AzureWebApp@1
+               displayName: 'Déployer dans App Service'
+               inputs:
+                azureSubscription: 'sc-azure-demo'
+                appType: 'webApp'
+                appName: # A FAIRE
+                package: '$(System.ArtifactsDirectory)/**/*.zip'
+                deploymentMethod: 'auto'
+
+
+#DEPLOYMENT FAVORIS API
+- stage: DeployFavorisnAPI
+  dependsOn: Build
+  pool:
+    vmImage: ubuntu-latest
+
+#DEV
+  jobs:
+  - deployment: "DeployFavorisAPIDev"
+    dependsOn: Build
+    environment: 'Dev'
+    strategy:
+     runOnce:
+       deploy:
+         steps:
+             - task: DownloadBuildArtifacts@1
+               displayName: 'Télécharger artecfact pour le déploiement'
+               inputs:
+                 buildType: 'current'
+                 downloadType: 'single'
+                 artifactName: 'drop'
+                 downloadPath: '$(System.ArtifactsDirectory)'
+             - task: AzureWebApp@1
+               displayName: 'Déployer dabs App Service'
+               inputs:
+                azureSubscription: 'sc-azure-demo'
+                appType: 'webApp'
+                appName: # A FAIRE
+                package: '$(System.ArtifactsDirectory)/**/*.zip'
+                deploymentMethod: 'auto'
+                
+#PROD
+  jobs:
+  - deployment: "DeployFavorisAPIProd"
+    dependsOn: DeployFavorisAPIDev
+    environment: 'Production'
+    strategy:
+     runOnce:
+       deploy:
+         steps:
+             - task: DownloadBuildArtifacts@1
+               displayName: 'Télécharger artecfact pour le déploiement'
+               inputs:
+                 buildType: 'current'
+                 downloadType: 'single'
+                 artifactName: 'drop'
+                 downloadPath: '$(System.ArtifactsDirectory)'
+             - task: AzureWebApp@1
+               displayName: 'Déployer dans App Service'
+               inputs:
+                azureSubscription: 'sc-azure-demo'
+                appType: 'webApp'
+                appName: # A FAIRE
+                package: '$(System.ArtifactsDirectory)/**/*.zip'
+                deploymentMethod: 'auto'
+
+
+#DEPLOYMENT DOCUMENTS API
+- stage: DeployDocumentsAPI
+  dependsOn: Build
+  pool:
+    vmImage: ubuntu-latest
+
+#DEV
+  jobs:
+  - deployment: "DeployDocumentsAPIDev"
+    dependsOn: Build
+    environment: 'Dev'
+    strategy:
+     runOnce:
+       deploy:
+         steps:
+             - task: DownloadBuildArtifacts@1
+               displayName: 'Télécharger artecfact pour le déploiement'
+               inputs:
+                 buildType: 'current'
+                 downloadType: 'single'
+                 artifactName: 'drop'
+                 downloadPath: '$(System.ArtifactsDirectory)'
+             - task: AzureWebApp@1
+               displayName: 'Déployer dabs App Service'
+               inputs:
+                azureSubscription: 'sc-azure-demo'
+                appType: 'webApp'
+                appName: # A FAIRE
+                package: '$(System.ArtifactsDirectory)/**/*.zip'
+                deploymentMethod: 'auto'
+                
+#PROD
+  jobs:
+  - deployment: "DeployDocumentsAPIProd"
+    dependsOn: DeployDocumentsAPIDev
+    environment: 'Production'
+    strategy:
+     runOnce:
+       deploy:
+         steps:
+             - task: DownloadBuildArtifacts@1
+               displayName: 'Télécharger artecfact pour le déploiement'
+               inputs:
+                 buildType: 'current'
+                 downloadType: 'single'
+                 artifactName: 'drop'
+                 downloadPath: '$(System.ArtifactsDirectory)'
+             - task: AzureWebApp@1
+               displayName: 'Déployer dans App Service'
+               inputs:
+                azureSubscription: 'sc-azure-demo'
+                appType: 'webApp'
+                appName: # A FAIRE
+                package: '$(System.ArtifactsDirectory)/**/*.zip'
+                deploymentMethod: 'auto'
+
+
+#DEPLOYMENT MVC
+- stage: DeployMVC
+  pool:
+    vmImage: ubuntu-latest
+
+#DEV
+  jobs:
+  - deployment: "DeployMVCDev"
+    dependsOn: 
+      DeployPostulationsAPI
+      DeployEmploisAPI
+      DeployFavorisAPI
+      DeployDocumentsAPI
+    environment: 'Dev'
+    strategy:
+     runOnce:
+       deploy:
+         steps:
+             - task: DownloadBuildArtifacts@1
+               displayName: 'Télécharger artecfact pour le déploiement'
+               inputs:
+                 buildType: 'current'
+                 downloadType: 'single'
+                 artifactName: 'drop'
+                 downloadPath: '$(System.ArtifactsDirectory)'
+             - task: AzureWebApp@1
+               displayName: 'Déployer dabs App Service'
+               inputs:
+                azureSubscription: 'sc-azure-demo'
+                appType: 'webApp'
+                appName: # A FAIRE
+                package: '$(System.ArtifactsDirectory)/**/*.zip'
+                deploymentMethod: 'auto'
+                
+#PROD
+  jobs:
+  - deployment: "DeployMVCProd"
+    dependsOn: 
+      DeployPostulationsAPIProd
+      DeployEmploisAPIProd
+      DeployFavorisAPIProd
+      DeployDocumentsAPIProd
+    environment: 'Production'
+    strategy:
+     runOnce:
+       deploy:
+         steps:
+             - task: DownloadBuildArtifacts@1
+               displayName: 'Télécharger artecfact pour le déploiement'
+               inputs:
+                 buildType: 'current'
+                 downloadType: 'single'
+                 artifactName: 'drop'
+                 downloadPath: '$(System.ArtifactsDirectory)'
+             - task: AzureWebApp@1
+               displayName: 'Déployer dans App Service'
+               inputs:
+                azureSubscription: 'sc-azure-demo'
+                appType: 'webApp'
+                appName: # A FAIRE
+                package: '$(System.ArtifactsDirectory)/**/*.zip'
+                deploymentMethod: 'auto'
+
