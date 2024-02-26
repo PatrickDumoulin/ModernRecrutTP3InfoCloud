@@ -12,7 +12,7 @@ pool:
 steps:
 - task: AzureCLI@2
   inputs:
-    azureSubscription: 'sc-azure-demo'
+    azureSubscription: 'sc-azure-dumoulin'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: 'az deployment group create --resource-group rg-dumoulin --template-file main.bicep --parameters location=CanadaCentral dbPassword="@Aa123"'
