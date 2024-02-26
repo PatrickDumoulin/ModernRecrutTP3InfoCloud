@@ -9,10 +9,13 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  bicepfile: '**\main.bicep'
+
 steps:
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'sc-azure-dumoulin'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
-    inlineScript: 'az deployment group create --resource-group rg-dumoulin --template-file main.bicep --parameters location=CanadaCentral dbPassword="@Aa123"'
+    inlineScript: 'az deployment group create --resource-group rg-dumoulin --template-file $(bicepfile) --parameters location=CanadaCentral dbPassword="@Aa123"'
