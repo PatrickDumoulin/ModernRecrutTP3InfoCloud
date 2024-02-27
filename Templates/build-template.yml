@@ -3,43 +3,38 @@ parameters:
   buildConfiguration: 'Release'
   artifactName: ''
 
-jobs:
- - job: BuildLinux  
-   pool:
-    vmImage: ubuntu-latest
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'Restaurer les packages NuGet'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+    feedsToUse: 'select'
 
-   steps:
-   - task: DotNetCoreCLI@2
-     displayName: 'Restaurer les packages NuGet'
-     inputs:
-       command: 'restore'
-       projects: '**/*.csproj'
-       feedsToUse: 'select'
-   
-   - task: DotNetCoreCLI@2
-     displayName: 'Génération de la solution'
-     inputs:
-       command: 'build'
-       projects: '**/*.csproj'
-       arguments: '--configuration ${{ parameters.buildConfiguration }}'
-   
-   - task: DotNetCoreCLI@2
-     displayName: 'Execution des tests unitaires'
-     inputs:
-       command: 'test'
-       projects: '**/*UnitTests.csproj'
-       arguments: '--configuration ${{ parameters.buildConfiguration }}' 
-   
-   - task: DotNetCoreCLI@2
-     displayName: 'Publication de la solution'
-     inputs:
-       command: 'publish'
-       publishWebProjects: true
-       arguments: '--configuration ${{ parameters.buildConfiguration }} --output $(Build.ArtifactStagingDirectory)'
-   
-   - task: PublishBuildArtifacts@1
-     displayName: Publication de l'artefact dans Azure Pipeline
-     inputs:
-       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-       ArtifactName: ${{ parameters.artifactName }}
-       publishLocation: 'Container'
+- task: DotNetCoreCLI@2
+  displayName: 'Génération de la solution'
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration ${{ parameters.buildConfiguration }}'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Execution des tests unitaires'
+  inputs:
+    command: 'test'
+    projects: '**/*UnitTests.csproj'
+    arguments: '--configuration ${{ parameters.buildConfiguration }}' 
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publication de la solution'
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--configuration ${{ parameters.buildConfiguration }} --output $(Build.ArtifactStagingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publication de l'artefact dans Azure Pipeline
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: ${{ parameters.artifactName }}
+    publishLocation: 'Container'
