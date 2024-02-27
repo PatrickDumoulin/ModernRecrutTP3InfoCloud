@@ -17,6 +17,7 @@ stages:
     - template: build-template.yml 
       parameters:
         buildConfiguration: $(buildConfiguration)
+        artifactName: $(artifactName)
 
 
 # API deployment stages

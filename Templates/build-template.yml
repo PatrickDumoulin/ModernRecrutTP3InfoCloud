@@ -1,4 +1,4 @@
-# dotnet-tasks-template.yml
+
 parameters:
   buildConfiguration: 'Release'
   artifactName: ''
