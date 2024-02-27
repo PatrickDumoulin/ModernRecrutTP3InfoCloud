@@ -36,5 +36,5 @@ steps:
   displayName: Publication de l'artefact dans Azure Pipeline
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: ${{ parameters.artifactName }}
+    ArtifactName: '${{ parameters.artifactName }}'
     publishLocation: 'Container'
