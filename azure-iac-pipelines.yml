@@ -18,4 +18,4 @@ steps:
     azureSubscription: 'sc-azure-dumoulin'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
-    inlineScript: 'az deployment group create --resource-group rg-dumoulin --template-file $(bicepfile)' --parameters location=CanadaEast
+    inlineScript: 'az deployment group create --resource-group rg-dumoulin --template-file $(bicepfile) --parameters location=CanadaEast'
