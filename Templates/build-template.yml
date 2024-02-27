@@ -33,7 +33,7 @@ steps:
     arguments: '--configuration ${{ parameters.buildConfiguration }} --output $(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publication de l'artefact dans Azure Pipeline'
+  displayName: Publication de l'artefact dans Azure Pipeline
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'

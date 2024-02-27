@@ -8,7 +8,7 @@ jobs:
 - job: DeployJob
   pool:
     vmImage: 'ubuntu-latest'
-  environment: '${{ parameters.environment }}'
+    environment: '${{ parameters.environment }}'
     strategy:
      runOnce:
        deploy:
