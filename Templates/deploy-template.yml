@@ -1,18 +1,14 @@
 parameters:
-  - name: environment
-    default: ''
-  - name: artifactName
-    default: ''
-  - name: serviceConnection
-    default: ''
-  - name: webAppName
-    default: ''
+  - environment: ''
+  - artifactName: ''
+  - serviceConnection: ''
+  - webAppName: ''
 
 jobs:
 - job: DeployJob
   pool:
     vmImage: 'ubuntu-latest'
-  environment: '${{ parameters.environment }}'
+  environment: ${{ parameters.environment }}
   strategy:
      runOnce:
        deploy:
@@ -21,13 +17,13 @@ jobs:
                inputs:
                  buildType: 'current'
                  downloadType: 'single'
-                 artifactName: '${{ parameters.artifactName }}'
-                 downloadPath: '$(System.ArtifactsDirectory)'
+                 artifactName: ${{ parameters.artifactName }}
+                 downloadPath: $(System.ArtifactsDirectory)
              - task: AzureWebApp@1
                displayName: 'Déployer dans App Service'
                inputs:
-                azureSubscription: '${{ parameters.serviceConnection }}'
+                azureSubscription: ${{ parameters.serviceConnection }}
                 appType: 'webApp'
-                appName: '${{ parameters.webAppName }}'
+                appName: ${{ parameters.webAppName }}
                 package: '$(System.ArtifactsDirectory)/**/*.zip'
                 deploymentMethod: 'auto'
