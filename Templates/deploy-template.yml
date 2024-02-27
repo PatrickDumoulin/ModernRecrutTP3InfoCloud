@@ -27,4 +27,4 @@ jobs:
                 appType: 'webApp'
                 appName: '${{ parameters.webAppName }}'
                 WebAppName: '${{ parameters.webAppName }}'
-                package: '$(System.ArtifactsDirectory)/**/*.zip'
+                package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
