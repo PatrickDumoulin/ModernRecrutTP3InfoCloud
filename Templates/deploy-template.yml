@@ -8,7 +8,7 @@ jobs:
 - job: DeployJob
   pool:
     vmImage: 'ubuntu-latest'
-  environment: ${{ parameters.environment }}
+  environment: '${{ parameters.environment }}'
   strategy:
      runOnce:
        deploy:
@@ -17,13 +17,14 @@ jobs:
                inputs:
                  buildType: 'current'
                  downloadType: 'single'
-                 artifactName: ${{ parameters.artifactName }}
-                 downloadPath: $(System.ArtifactsDirectory)
-             - task: AzureWebApp@1
+                 artifactName: '${{ parameters.artifactName }}'
+                 downloadPath: '$(System.ArtifactsDirectory)'
+             - task: AzureRmWebAppDeployment@4
                displayName: 'Déployer dans App Service'
                inputs:
-                azureSubscription: ${{ parameters.serviceConnection }}
+                ConnectionType: 'AzureRM'
+                azureSubscription: '${{ parameters.serviceConnection }}'
                 appType: 'webApp'
-                appName: ${{ parameters.webAppName }}
+                appName: '${{ parameters.webAppName }}'
+                WebAppName: '${{ parameters.webAppName }}'
                 package: '$(System.ArtifactsDirectory)/**/*.zip'
-                deploymentMethod: 'auto'
