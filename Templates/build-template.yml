@@ -1,0 +1,40 @@
+# dotnet-tasks-template.yml
+parameters:
+- name: buildConfiguration
+  default: 'Release'
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'Restaurer les packages NuGet'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+    feedsToUse: 'select'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Génération de la solution'
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration ${{ parameters.buildConfiguration }}'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Execution des tests unitaires'
+  inputs:
+    command: 'test'
+    projects: '**/*UnitTests.csproj'
+    arguments: '--configuration ${{ parameters.buildConfiguration }}' 
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publication de la solution'
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--configuration ${{ parameters.buildConfiguration }} --output $(Build.ArtifactStagingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publication de l'artefact dans Azure Pipeline'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'

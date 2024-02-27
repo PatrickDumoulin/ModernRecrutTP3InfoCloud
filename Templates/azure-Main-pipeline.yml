@@ -1,0 +1,175 @@
+trigger:
+- master
+
+variables:
+    buildConfiguration: 'Release'
+    serviceConnection: 'sc-azure-dumoulin'
+    artifactName: 'drop'
+    environmentDev: 'Dev'
+    environmentProd: 'Production'
+
+stages:
+- stage: 'Build'
+
+  pool:
+    vmImage: ubuntu-latest
+
+
+  jobs:
+  - job: "Build"
+    steps:
+    - template: dotnet-tasks-template.yml 
+      parameters:
+        buildConfiguration: $(buildConfiguration)
+
+
+# API deployment stages
+
+#DEPLOYMENT POSTULATION API 
+
+#DEV
+- stage: DeployPostulationsAPIDev
+  displayName: 'Deploy Postulations API en DEV'
+  dependsOn: Build
+  jobs:
+  - template: deploy-template.yml
+    parameters: 
+      environment: $(environmentDev)
+      artifactName: $(artifactName)
+      serviceConnection: $(serviceConnection)
+      webAppName: 'webapp-postulation-wxvch2vtzj6fy'
+  
+                
+#PROD
+- stage: DeployPostulationsAPIProd
+  displayName: 'Deploy Postulations API en PROD'
+  dependsOn: DeployPostulationsAPIDev
+  jobs:
+  - template: deploy-template.yml
+    parameters: 
+      environment: $(environmentProd)
+      artifactName: $(artifactName)
+      serviceConnection: $(serviceConnection)
+      webAppName: 'webapp-postulation-wxvch2vtzj6fy'
+
+
+#DEPLOYMENT EMPLOIS API
+
+#DEV
+- stage: DeployEmploisAPIDev
+  displayName: 'Deploy Emplois API en DEV'
+  dependsOn: Build
+  jobs:
+  - template: deploy-template.yml
+    parameters: 
+      environment: $(environmentDev)
+      artifactName: $(artifactName)
+      serviceConnection: $(serviceConnection)
+      webAppName: 'webapp-emplois-wxvch2vtzj6fy'
+  
+                
+#PROD
+- stage: DeployEmploisAPIProd
+  displayName: 'Deploy Emplois API en PROD'
+  dependsOn: DeployEmploisAPIDev
+  jobs:
+  - template: deploy-template.yml
+    parameters: 
+      environment: $(environmentProd)
+      artifactName: $(artifactName)
+      serviceConnection: $(serviceConnection)
+      webAppName: 'webapp-emplois-wxvch2vtzj6fy'
+
+
+#DEPLOYMENT FAVORIS API
+
+#DEV
+- stage: DeployFavorisAPIDev
+  displayName: 'Deploy Favoris API en DEV'
+  dependsOn: Build
+  jobs:
+  - template: deploy-template.yml
+    parameters: 
+      environment: $(environmentDev)
+      artifactName: $(artifactName)
+      serviceConnection: $(serviceConnection)
+      webAppName: 'webapp-favoris-wxvch2vtzj6fy'
+  
+                
+#PROD
+- stage: DeployFavorisAPIProd
+  displayName: 'Deploy Favoris API en PROD'
+  dependsOn: DeployFavorisAPIDev
+  jobs:
+  - template: deploy-template.yml
+    parameters: 
+      environment: $(environmentProd)
+      artifactName: $(artifactName)
+      serviceConnection: $(serviceConnection)
+      webAppName: 'webapp-favoris-wxvch2vtzj6fy'
+
+
+#DEPLOYMENT DOCUMENTS API
+
+#DEV
+- stage: DeployDocumentsAPIDev
+  displayName: 'Deploy Documents API en DEV'
+  dependsOn: Build
+  jobs:
+  - template: deploy-template.yml
+    parameters: 
+      environment: $(environmentDev)
+      artifactName: $(artifactName)
+      serviceConnection: $(serviceConnection)
+      webAppName: 'webapp-documents-wxvch2vtzj6fy'
+  
+                
+#PROD
+- stage: DeployDocumentsAPIProd
+  displayName: 'Deploy Documents API en PROD'
+  dependsOn: DeployDocumentsAPIDev
+  jobs:
+  - template: deploy-template.yml
+    parameters: 
+      environment: $(environmentProd)
+      artifactName: $(artifactName)
+      serviceConnection: $(serviceConnection)
+      webAppName: 'webapp-documents-wxvch2vtzj6fy'
+
+
+#DEPLOYMENT MVC
+
+#DEV
+- stage: DeployMVCDev
+  displayName: 'Deploy MVC en DEV'
+  dependsOn: 
+    - DeployPostulationsAPIDev
+    - DeployEmploisAPIDev
+    - DeployFavorisAPIDev
+    - DeployDocumentsAPIDev
+  jobs:
+  - template: deploy-template.yml
+    parameters: 
+      environment: $(environmentDev)
+      artifactName: $(artifactName)
+      serviceConnection: $(serviceConnection)
+      webAppName: 'webapp-mvc-wxvch2vtzj6fy'
+  
+                
+#PROD
+- stage: DeployMVCProd
+  displayName: 'Deploy MVC en PROD'
+  dependsOn: 
+    DeployPostulationsAPIProd
+    DeployEmploisAPIProd
+    DeployFavorisAPIProd
+    DeployDocumentsAPIProd
+  jobs:
+  - template: deploy-template.yml
+    parameters: 
+      environment: $(environmentProd)
+      artifactName: $(artifactName)
+      serviceConnection: $(serviceConnection)
+      webAppName: 'webapp-mvc-wxvch2vtzj6fy'
+
+

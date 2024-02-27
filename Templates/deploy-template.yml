@@ -1,0 +1,29 @@
+parameters:
+  - environment: ''
+  - artifactName: ''
+  - serviceConnection: ''
+  - webAppName: ''
+
+jobs:
+- job: DeployJob
+  pool:
+    vmImage: 'ubuntu-latest'
+  environment: '${{ parameters.environment }}'
+    strategy:
+     runOnce:
+       deploy:
+         steps:
+             - task: DownloadBuildArtifacts@1
+               inputs:
+                 buildType: 'current'
+                 downloadType: 'single'
+                 artifactName: '${{ parameters.artifactName }}'
+                 downloadPath: '$(System.ArtifactsDirectory)'
+             - task: AzureWebApp@1
+               displayName: 'Déployer dans App Service'
+               inputs:
+                azureSubscription: '${{ parameters.serviceConnection }}'
+                appType: 'webApp'
+                appName: '${{ parameters.webAppName }}'
+                package: '$(System.ArtifactsDirectory)/**/*.zip'
+                deploymentMethod: 'auto'
