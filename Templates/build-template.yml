@@ -1,7 +1,7 @@
 # dotnet-tasks-template.yml
 parameters:
-- name: buildConfiguration
-  default: 'Release'
+  buildConfiguration: 'Release'
+  artifactName: ''
 
 jobs:
  - job: BuildLinux  
@@ -41,5 +41,5 @@ jobs:
      displayName: Publication de l'artefact dans Azure Pipeline
      inputs:
        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-       ArtifactName: 'drop'
+       ArtifactName: ${{ parameters.artifactName }}
        publishLocation: 'Container'
