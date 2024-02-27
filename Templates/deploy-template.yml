@@ -1,8 +1,8 @@
 parameters:
-  - environment: ''
-  - artifactName: ''
-  - serviceConnection: ''
-  - webAppName: ''
+   environment: ''
+   artifactName: ''
+   serviceConnection: ''
+   webAppName: ''
 
 jobs:
 - job: DeployJob

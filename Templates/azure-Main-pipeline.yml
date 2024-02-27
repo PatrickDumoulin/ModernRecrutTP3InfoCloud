@@ -10,11 +10,7 @@ variables:
 
 stages:
 - stage: 'Build'
-
-  pool:
-    vmImage: ubuntu-latest
-
-
+  displayName: 'Build et execution des tests'
   jobs:
   - job: "Build"
     steps:
@@ -28,9 +24,9 @@ stages:
 #DEPLOYMENT POSTULATION API 
 
 #DEV
-- stage: DeployPostulationsAPIDev
+- stage: 'DeployPostulationsAPIDev'
   displayName: 'Deploy Postulations API en DEV'
-  dependsOn: Build
+  dependsOn: 'Build'
   jobs:
   - template: deploy-template.yml
     parameters: 
@@ -41,9 +37,9 @@ stages:
   
                 
 #PROD
-- stage: DeployPostulationsAPIProd
+- stage: 'DeployPostulationsAPIProd'
   displayName: 'Deploy Postulations API en PROD'
-  dependsOn: DeployPostulationsAPIDev
+  dependsOn: 'DeployPostulationsAPIDev'
   jobs:
   - template: deploy-template.yml
     parameters: 
@@ -56,9 +52,9 @@ stages:
 #DEPLOYMENT EMPLOIS API
 
 #DEV
-- stage: DeployEmploisAPIDev
+- stage: 'DeployEmploisAPIDev'
   displayName: 'Deploy Emplois API en DEV'
-  dependsOn: Build
+  dependsOn: 'Build'
   jobs:
   - template: deploy-template.yml
     parameters: 
@@ -69,9 +65,9 @@ stages:
   
                 
 #PROD
-- stage: DeployEmploisAPIProd
+- stage: 'DeployEmploisAPIProd'
   displayName: 'Deploy Emplois API en PROD'
-  dependsOn: DeployEmploisAPIDev
+  dependsOn: 'DeployEmploisAPIDev'
   jobs:
   - template: deploy-template.yml
     parameters: 
@@ -84,9 +80,9 @@ stages:
 #DEPLOYMENT FAVORIS API
 
 #DEV
-- stage: DeployFavorisAPIDev
+- stage: 'DeployFavorisAPIDev'
   displayName: 'Deploy Favoris API en DEV'
-  dependsOn: Build
+  dependsOn: 'Build'
   jobs:
   - template: deploy-template.yml
     parameters: 
@@ -97,9 +93,9 @@ stages:
   
                 
 #PROD
-- stage: DeployFavorisAPIProd
+- stage: 'DeployFavorisAPIProd'
   displayName: 'Deploy Favoris API en PROD'
-  dependsOn: DeployFavorisAPIDev
+  dependsOn: 'DeployFavorisAPIDev'
   jobs:
   - template: deploy-template.yml
     parameters: 
@@ -112,9 +108,9 @@ stages:
 #DEPLOYMENT DOCUMENTS API
 
 #DEV
-- stage: DeployDocumentsAPIDev
+- stage: 'DeployDocumentsAPIDev'
   displayName: 'Deploy Documents API en DEV'
-  dependsOn: Build
+  dependsOn: 'Build'
   jobs:
   - template: deploy-template.yml
     parameters: 
@@ -125,9 +121,9 @@ stages:
   
                 
 #PROD
-- stage: DeployDocumentsAPIProd
+- stage: 'DeployDocumentsAPIProd'
   displayName: 'Deploy Documents API en PROD'
-  dependsOn: DeployDocumentsAPIDev
+  dependsOn: 'DeployDocumentsAPIDev'
   jobs:
   - template: deploy-template.yml
     parameters: 
@@ -140,13 +136,13 @@ stages:
 #DEPLOYMENT MVC
 
 #DEV
-- stage: DeployMVCDev
+- stage: 'DeployMVCDev'
   displayName: 'Deploy MVC en DEV'
   dependsOn: 
-    - DeployPostulationsAPIDev
-    - DeployEmploisAPIDev
-    - DeployFavorisAPIDev
-    - DeployDocumentsAPIDev
+    - 'DeployPostulationsAPIDev'
+    - 'DeployEmploisAPIDev'
+    - 'DeployFavorisAPIDev'
+    - 'DeployDocumentsAPIDev'
   jobs:
   - template: deploy-template.yml
     parameters: 
@@ -157,13 +153,13 @@ stages:
   
                 
 #PROD
-- stage: DeployMVCProd
+- stage: 'DeployMVCProd'
   displayName: 'Deploy MVC en PROD'
   dependsOn: 
-    DeployPostulationsAPIProd
-    DeployEmploisAPIProd
-    DeployFavorisAPIProd
-    DeployDocumentsAPIProd
+   - 'DeployPostulationsAPIProd'
+   - 'DeployEmploisAPIProd'
+   - 'DeployFavorisAPIProd'
+   - 'DeployDocumentsAPIProd'
   jobs:
   - template: deploy-template.yml
     parameters: 
