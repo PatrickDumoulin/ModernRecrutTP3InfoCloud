@@ -8,7 +8,7 @@ trigger:
 - none
 
 variables:
-  serviceConnection: -"sc-azure-dumoulin"
+  serviceConnection: "sc-azure-dumoulin"
   appName: 'webapp-emplois-wxvch2vtzj6fy'
   containerRegistry: 'acrtp3cloud.azurecr.io'
   acrServiceConnection : "sc-container-registry"
