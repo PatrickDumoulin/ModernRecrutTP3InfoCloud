@@ -1,0 +1,59 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+
+trigger:
+- none
+
+variables:
+  serviceConnection: -"sc-azure-dumoulin"
+  appName: 'webapp-emplois-wxvch2vtzj6fy'
+  containerRegistry: 'acrtp3cloud.azurecr.io'
+  acrServiceConnection : "sc-container-registry"
+  imageRepository:  "tp3"
+  dockerfilePath: '**/Dockerfile*'
+  tag: '$(Build.BuildId)'
+
+stages:
+  - stage : 'Build'
+    displayName: 'Génération et push image'
+    pool:
+      vmImage: 'ubuntu-latest'
+    jobs:
+    - job: 'Build'
+      steps:
+      - task: Docker@2
+      inputs:
+        containerRegistry: '$(acrServiceConnection)'
+        repository: '$(imageRepository)'
+        command: 'buildAndPush'
+        Dockerfile: '$(dockerfilePath)'
+        buildContext: '$(Build.SourcesDirectory)'
+      displayName: 'Génération et push image dans registre de conteneurs'
+
+  - stage: 'DeployToDev'
+    displayName: 'Déploiement en Dev'
+    pool:
+      vmImage: 'ubuntu-latest'
+    dependsOn: 'Build'
+    jobs:
+      - deployment: 'DeployToDev'
+        environment: 'Dev'
+        strategy:
+         runOnce:
+           deploy:
+             steps:
+            
+            
+             - task: AzureWebAppContainer@1
+               inputs:
+                 azureSubscription: '$(serviceConnection)'
+                 appName: '$(appName)'
+                 containers: '$(containerRegistry)/$(imageRepository):$(tag)'
+               displayName: 'Déploiement sur Azure Web App For Container'
+
+
+
+
